@@ -29,7 +29,7 @@ time.sleep(5)
 
 driver.find_element_by_name("ctl00$ContentPlaceHolder$SalesChannelDetailControl$EventsDateTimeSelectorModal$EventsDateTimeSelector$CalendarSelector$MonthDropDownList").send_keys(("December"))
 time.sleep(5)
-days_len = driver.find_elements_by_xpath("(//*[contains(@class, 'c c-14-all day ng-scope available')])")
+days_len = len(driver.find_elements_by_xpath("(//*[contains(@class, 'c c-14-all day ng-scope available')])"))
 time.sleep(5)
 
 for number in range(days_len):
