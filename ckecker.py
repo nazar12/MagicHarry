@@ -22,11 +22,15 @@ def telegram_bot_sendtext(bot_message):
 #test = telegram_bot_sendtext("check")
 #print(test)
 def report():
-    is_queue = True
+    now = datetime.now()
 
+    current_time = now.strftime("%H:%M:%S")
+    timer=str((current_time))
+
+    is_queue = True
     url = "https://tickets.wbstudiotour.co.uk/webstore/shop/ViewItems.aspx?CG=HPTST2&C=TIX2&_ga=2.178305572.1851349500.1632157983-2010059077.1603341446"
 
-    driver = webdriver.Chrome(executable_path= "/Users/{add_you_path}/Downloads/chromedriver")
+    driver = webdriver.Chrome(executable_path= "/Users/danielrabinovich/Downloads/chromedriver")
     driver.get(url=url)
     time.sleep(2)
     if "Queue-it" in driver.title:
@@ -53,7 +57,7 @@ def report():
         try:
             element = driver.find_elements_by_xpath("(//*[contains(@class, 'c c-14-all day ng-scope available')])")[number]
             day_number = element.text
-            if not 1 <= int(day_number) <= 31: continue
+            if not 9 <= int(day_number) <= 11: continue
             element.click()
             time.sleep(2)
             hours_len = driver.find_elements_by_xpath("(//*[contains(@class, 'event_time ng-binding')])")
@@ -62,11 +66,13 @@ def report():
                 hour_text = i.text
                 print(f"Day: {day_number}, hour: {hour_text}")
                 telegram_bot_sendtext(f"Day: {day_number}, hour: {hour_text}")
+
         except Exception as e:
             print(e)
             pass
         finally:
             time.sleep(2)
+    telegram_bot_sendtext(f"Didn't find your turn: {timer}")
     driver.close()
     driver.quit()
 #schedule.every().day.at("19:29").do(report)
@@ -74,13 +80,3 @@ schedule.every(10).minutes.do(report)
 while True:
     schedule.run_pending()
     time.sleep(1)
-"""#print(len(day_available))
-ggg = day_available[2]
-ggg.click()
-"""
-"""
-for x in range(len(day_available)):
-    y = day_available[x]
-    print(y.text)
-    y.click()
-"""
